@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700"
+      rel="stylesheet"
+    />
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    ></script>
+    <!--  -->
+    <!--  -->
+    <title>Time Machine</title>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+
+    <link rel="icon" href="../Weather icon/weatherIcon.png" />
+    <style>
+      .custom-form {
+        min-width: 300px;
+        max-width: 500px;
+        width: 40%;
+        padding: 3em;
+        border: 1px solid lightgray;
+      }
+
+      .dropdown-item {
+        color: black;
+      }
+
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        border-bottom: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .blockquote-custom {
+        position: relative;
+        font-size: 1.1rem;
+      }
+
+      .blockquote-custom-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -25px;
+        left: 50px;
+      }
+    </style>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <style>
+      body {
+        color: #000;
+        overflow-x: hidden;
+        height: 100%;
+        background-image: linear-gradient(180deg, white, #fff);
+        background-repeat: no-repeat;
+      }
+
+      .card {
+        box-shadow: 0px 4px 8px 0px #bdbdbd;
+        border-bottom: 1px solid lightgray;
+      }
+
+      .weather-icon {
+        width: 150px !important;
+        height: 150px;
+        /*box-shadow: 0px 4px 8px 0px #bdbdbd;*/
+      }
+
+      .owl-carousel .owl-nav button.owl-next,
+      .owl-carousel .owl-nav button.owl-prev {
+        background: 0 0;
+        color: darkgray !important;
+        border: none;
+        padding: 5px 20px !important;
+        font: inherit;
+        font-size: 50px !important;
+      }
+
+      .owl-carousel .owl-nav button.owl-next:hover,
+      .owl-carousel .owl-nav button.owl-prev:hover {
+        color: lightgray !important;
+        background-color: transparent !important;
+      }
+
+      .owl-dots {
+        display: none;
+      }
+
+      button:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        outline-width: 0;
+      }
+
+      .item {
+        display: none;
+      }
+
+      .next {
+        display: block !important;
+        position: relative;
+        transform: scale(0.8);
+        transition-duration: 0.3s;
+        opacity: 0.6;
+      }
+
+      .prev {
+        display: block !important;
+        position: relative;
+        transform: scale(0.8);
+        transition-duration: 0.3s;
+        opacity: 0.6;
+      }
+
+      .item.show {
+        display: block;
+        transition-duration: 0.4s;
+      }
+
+      @media screen and (max-width: 999px) {
+        .next,
+        .prev {
+          transform: scale(1);
+          opacity: 1;
+        }
+
+        .item {
+          display: block !important;
+        }
+      }
+    </style>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <style>
+      span {
+        margin-left: 24px;
+        color: #999;
+        font-weight: 300;
+      }
+
+      span span {
+        margin-left: 0;
+      }
+
+      .dot {
+        font-size: 0.9em;
+      }
+
+      .custom-icon {
+        height: 30px;
+        width: 30px;
+      }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $("#loader").hide(500);
+
+        //Logic for cards
+
+        $(".owl-carousel").owlCarousel({
+          mouseDrag: false,
+          loop: true,
+          margin: 2,
+          nav: true,
+          responsive: {
+            0: {
+              items: 1,
+            },
+            600: {
+              items: 1,
+            },
+            1000: {
+              items: 3,
+            },
+          },
+        });
+
+        $(".owl-prev").click(function () {
+          $active = $(".owl-item .item.show");
+          $(".owl-item .item.show").removeClass("show");
+          $(".owl-item .item").removeClass("next");
+          $(".owl-item .item").removeClass("prev");
+
+          //my changes
+          $(".owl-item .item").removeClass("next");
+          //
+
+          $active.addClass("next");
+
+          if ($active.is(".first")) {
+            $(".owl-item .last").addClass("show");
+            $(".first").addClass("next");
+            $(".owl-item .last")
+              .parent()
+              .prev()
+              .children(".item")
+              .addClass("prev");
+          } else {
+            $active.parent().prev().children(".item").addClass("show");
+            if ($active.parent().prev().children(".item").is(".first")) {
+              $(".owl-item .last").addClass("prev");
+            } else {
+              $(".owl-item .show")
+                .parent()
+                .prev()
+                .children(".item")
+                .addClass("prev");
+            }
+          }
+        });
+
+        $(".owl-next").click(function () {
+          $active = $(".owl-item .item.show");
+          $(".owl-item .item.show").removeClass("show");
+          $(".owl-item .item").removeClass("next");
+          $(".owl-item .item").removeClass("prev");
+          $active.addClass("prev");
+          if ($active.is(".last")) {
+            $(".owl-item .first").addClass("show");
+            $(".owl-item .first")
+              .parent()
+              .next()
+              .children(".item")
+              .addClass("prev");
+          } else {
+            $active.parent().next().children(".item").addClass("show");
+            if ($active.parent().next().children(".item").is(".last")) {
+              $(".owl-item .first").addClass("next");
+            } else {
+              $(".owl-item .show")
+                .parent()
+                .next()
+                .children(".item")
+                .addClass("next");
+            }
+          }
+        });
+      });
+    </script>
+
+    <!-- <script>
+      window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+          title: {
+            text: "Time Machine - Weather Forecast",
+          },
+          axisY: {
+            suffix: " °C",
+            maximum: 40,
+            minimum: -40,
+            gridThickness: 0,
+          },
+
+          toolTip: {
+            shared: true,
+            content:
+              "{name} </br> <strong>Temperature: </strong> </br> Min: {y[0]} °C, Max: {y[1]} °C",
+          },
+
+          data: [
+            {
+              type: "rangeSplineArea",
+              fillOpacity: 0.1,
+              color: "#91AAB1",
+              indexLabelFormatter: formatter,
+              dataPoints: [
+                { label: "Monday", y: [15, 26], name: "rainy" },
+                { label: "Tuesday", y: [15, 27], name: "rainy" },
+                { label: "Wednesday", y: [13, 27], name: "sunny" },
+                { label: "Thursday", y: [14, 27], name: "sunny" },
+                { label: "Friday", y: [15, 26], name: "cloudy" },
+                { label: "Saturday", y: [17, 26], name: "sunny" },
+                { label: "Sunday", y: [16, 27], name: "rainy" },
+                { label: "Thursday", y: [14, 27], name: "sunny" },
+                { label: "Friday", y: [15, 26], name: "cloudy" },
+                { label: "Saturday", y: [17, 26], name: "sunny" },
+                { label: "Sunday", y: [16, 27], name: "rainy" },
+              ],
+            },
+          ],
+        });
+        chart.render();
+
+        function formatter(e) {
+          if (e.index === 0 && e.dataPoint.x === 0) {
+            return " Min " + e.dataPoint.y[e.index] + "°";
+          } else if (e.index == 1 && e.dataPoint.x === 0) {
+            return " Max " + e.dataPoint.y[e.index] + "°";
+          } else {
+            return e.dataPoint.y[e.index] + "°";
+          }
+        }
+      };
+    </script> -->
+
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+  </head>
+
+  <body>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+      <a href="index.html" class="navbar-brand"
+        ><img
+          src="../Weather icon/weatherIcon.png"
+          class="custom-icon mx-2"
+          alt=""
+        />Weather Buddy</a
+      >
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+        <span class="mr-auto"></span>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="../index.html" class="nav-link">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="timeMachine.html" class="nav-link">Time Machine</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="../Map.html" class="nav-link">Map</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="../alert.html" class="nav-link"> Alerts </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="modal"> Github </a>
+          </li>
+        </ul>
+        <!--  -->
+      </div>
+    </nav>
+    <br />
+    <br />
+
+    <div class="alert alert-danger mx-auto" role="alert">
+      Travelling too far into the future or past may yeild unexpected results!
+    </div>
+    <br />
+    <div class="container mx-auto custom-form">
+      <h5 class="ml-3">Enter Location details</h5>
+      <div class="col w-40">
+        <form action="">
+          <br />
+          <input
+            type="text"
+            class="form-control border"
+            id="city-input"
+            placeholder="City"
+            required
+          />
+
+          <br />
+          <div class="mt-3">
+            <label for="past-days" class="control-label"
+              ><b>Travel to the past!</b></label
+            >
+            <input
+              id="past-days"
+              type="number"
+              min="1"
+              max="30"
+              class="form-control border"
+              placeholder="Days you wish to travel back"
+              required
+            />
+          </div>
+
+          <br />
+          <div class="mt-3">
+            <label for="future-days" class="control-label"
+              ><b>Travel to the future!</b></label
+            >
+            <input
+              id="future-days"
+              type="number"
+              min="1"
+              max="30"
+              class="form-control border"
+              placeholder="Days you wish to travel into the future"
+              required
+            />
+          </div>
+          <br />
+          <input
+            type="submit"
+            id="btn1"
+            class="btn btn-block btn-outline-primary mt-3"
+          />
+        </form>
+      </div>
+    </div>
+    <br />
+
+    <div id="loader" class="loader mx-auto"></div>
+
+    <br />
+    <br />
+
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <!-- CUSTOM BLOCKQUOTE -->
+        <blockquote
+          class="blockquote blockquote-custom bg-light borber border-dark p-5 shadow rounded"
+        >
+          <div class="blockquote-custom-icon bg-info shadow-sm">
+            <i class="fa fa-quote-left text-white"></i>
+          </div>
+          <p class="mb-0 mt-2 font-italic">
+            "Sunshine is delicious, rain is refreshing, wind braces us up, snow
+            is exhilarating; there is really no such thing as bad weather, only
+            different kinds of good weather."
+          </p>
+          <footer class="blockquote-footer pt-4 mt-4 border-top">
+            <cite title="Source Title">John Ruskin</cite>
+          </footer>
+        </blockquote>
+        <!-- END -->
+      </div>
+    </div>
+
+    <br />
+
+    <!--  -->
+    <!--  -->
+    <!-- Cards Start here -->
+    <!--  -->
+    <div
+      class="container-fluid px-3 px-sm-5 my-5 text-center"
+      id="weather-cards"
+    >
+      <h4 class="mb-5 font-weight-bold" id="heading"></h4>
+      <div class="owl-carousel owl-theme" id="custom-carousel"></div>
+    </div>
+    <!--  -->
+    <!--  -->
+    <!-- Cards End here -->
+
+    <!--  -->
+    <!--  -->
+    <!-- Chart Start here -->
+    <!--  -->
+    <div
+      class="mx-auto"
+      id="chartContainer"
+      style="height: 400px; width: 80%; position: relative"
+    ></div>
+    <!--  -->
+    <!--  -->
+    <!-- Chart End here -->
+
+    <script src="timeMachine.js"></script>
+  </body>
+</html>

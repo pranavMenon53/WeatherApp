@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Map</title>
+    <link rel="icon" href="./Weather icon/weatherIcon.png" />
+    <!-- Bootstrap core CSS -->
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom styles for this template -->
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- Style for Map -->
+    <style>
+      .container-fluid {
+        height: 100%;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      @media (min-width: 300px) {
+        html,
+        body {
+          height: 97%;
+          margin: 0;
+        }
+        .map-container {
+          overflow: hidden;
+          position: relative;
+          padding-bottom: 90%;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      @media (min-width: 500px) {
+        html,
+        body {
+          height: 97.25%;
+          margin: 0;
+        }
+        .map-container {
+          overflow: hidden;
+          position: relative;
+          padding-bottom: 110%;
+          height: 1000;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      @media (min-width: 576px) {
+        .map-container {
+          overflow: hidden;
+          padding-bottom: 100%;
+          position: relative;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      /* Medium devices (tablets) */
+
+      @media (min-width: 768px) {
+        html,
+        body {
+          height: 90%;
+          margin: 0;
+        }
+        .map-container {
+          overflow: hidden;
+          padding-bottom: 108%;
+          position: relative;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      /* Large devices (desktops) */
+      @media (min-width: 992px) {
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+        }
+        .map-container {
+          overflow: hidden;
+          padding-bottom: 64%;
+          position: relative;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      /* Extra large devices (large desktops) */
+
+      @media (min-width: 1200px) {
+        html,
+        body {
+          height: 80%;
+          margin: 0;
+        }
+        .map-container {
+          overflow: hidden;
+          padding-bottom: 65%;
+          position: relative;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      /* The given screen size or smaller */
+
+      /* Extra small devices (portrait phones)*/
+
+      @media (max-width: 575px) {
+        .map-container {
+          overflow: hidden;
+          padding-bottom: 85%;
+          position: relative;
+          height: 0;
+        }
+        .map-container iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+
+      .custom-icon {
+        height: 30px;
+        width: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+      <a href="index.html" class="navbar-brand"
+        ><img
+          src="./Weather icon/weatherIcon.png"
+          class="custom-icon mx-2"
+          alt=""
+        />Weather Buddy</a
+      >
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+        <span class="mr-auto"></span>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="./Time Machine/timeMachine.html" class="nav-link"
+              >Time Machine</a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a href="Map.html" class="nav-link">Map</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="alert.html" class="nav-link">
+              Alerts
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="modal">
+              Github
+            </a>
+          </li>
+        </ul>
+        <!--  -->
+      </div>
+    </nav>
+
+    <br />
+    <br />
+
+    <div
+      id="map-container"
+      class="z-depth-1-half map-container"
+      style="height: 100%;"
+    >
+      <iframe
+        src="https://embed.windy.com/embed2.html?lat=28.691&lon=136.055&detailLat=28.691&detailLon=136.055&width=650&height=450&zoom=3&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1"
+        frameborder="0"
+        style="border: 0;"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </body>
+</html>

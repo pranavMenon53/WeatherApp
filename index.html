@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Weather buddy</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom styles for this template -->
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <link rel="icon" href="./Weather icon/weatherIcon.png" />
+
+    <style>
+      body {
+        font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        position: relative;
+      }
+
+      header.masthead {
+        position: relative;
+        background-color: #343a40;
+        background: url("./images/Background.jpeg") no-repeat center center;
+        background-size: cover;
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+      }
+
+      header.masthead .overlay {
+        position: absolute;
+        background-color: #212529;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+      }
+
+      header.masthead h1 {
+        font-size: 2rem;
+        color: white;
+      }
+
+      @media (min-width: 768px) {
+        header.masthead {
+          padding-top: 12rem;
+          padding-bottom: 12rem;
+        }
+        header.masthead h1 {
+          font-size: 3rem;
+        }
+      }
+
+      h1 {
+        align-self: center;
+        color: #666;
+        font-weight: 300;
+        font-size: 6.59375em;
+        line-height: 0.2em;
+        -webkit-animation: up 2s cubic-bezier(0.39, 0, 0.38, 1) 0.2s;
+      }
+
+      .masthead-form {
+        -webkit-animation: up 2s cubic-bezier(0.39, 0, 0.38, 1) 0.2s;
+      }
+
+      @-webkit-keyframes up {
+        0% {
+          opacity: 0;
+          -webkit-transform: translateY(15px);
+        }
+        50% {
+          opacity: 0;
+          -webkit-transform: translateY(15px);
+        }
+        99% {
+          -webkit-animation-play-state: paused;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .showcase .showcase-text {
+        padding: 3rem;
+      }
+
+      .showcase .showcase-img {
+        min-height: 30rem;
+        background-size: cover;
+      }
+
+      @media (min-width: 768px) {
+        .showcase .showcase-text {
+          padding: 7rem;
+        }
+      }
+
+      .animate-up {
+        -webkit-animation: up 2s cubic-bezier(0.39, 0, 0.38, 1) 0.2s;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .main {
+        position: relative;
+
+        -webkit-animation: up 2s cubic-bezier(0.39, 0, 0.38, 1) 0.2s;
+      }
+
+      .mb-wrap {
+        margin: 20px auto;
+        padding: 20px;
+        position: relative;
+        width: 300px;
+      }
+
+      .mb-wrap p {
+        margin: 0;
+        padding: 0;
+      }
+
+      .mb-wrap blockquote {
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+
+      .mb-wrap cite {
+        font-style: normal;
+      }
+
+      .mb-style-2 blockquote {
+        padding-top: 150px;
+      }
+
+      .mb-style-2 blockquote:after {
+        background: none repeat scroll 0 0 rgba(235, 150, 108, 0.8);
+        border-radius: 50% 50% 50% 50%;
+        color: rgba(255, 255, 255, 0.5);
+        content: "❞";
+        font-family: "icons";
+        font-size: 70px;
+        height: 130px;
+        left: 50%;
+        line-height: 130px;
+        margin-left: -65px;
+        position: absolute;
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+        top: 0;
+        width: 130px;
+      }
+      .mb-style-2 blockquote:before {
+        border-left: 5px solid rgba(235, 150, 108, 0.3);
+        border-radius: 50% 50% 50% 50%;
+        content: "";
+        height: 500px;
+        left: -50px;
+        position: absolute;
+        top: 0;
+        width: 500px;
+        z-index: -1;
+      }
+
+      .mb-style-2 blockquote p {
+        background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+        box-shadow: 0 -6px 0 rgba(235, 150, 108, 0.2);
+        color: rgba(235, 150, 108, 0.8);
+        display: inline;
+        font-family: Baskerville, Georgia, serif;
+        font-style: italic;
+        font-size: 25px;
+        line-height: 46px;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+      }
+
+      .mb-attribution {
+        margin: 6px 0 0 0;
+        text-align: center;
+      }
+
+      .mb-author {
+        color: #d48158;
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 10px;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+      }
+
+      cite a {
+        color: #d7aa94;
+        font-style: italic;
+      }
+
+      cite a:hover {
+        color: #d48158;
+      }
+      .custom-icon {
+        height: 30px;
+        width: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+      <a href="index.html" class="navbar-brand">
+        <img
+          src="./Weather icon/weatherIcon.png"
+          class="custom-icon mx-2"
+          alt=""
+        />Weather Buddy</a
+      >
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+        <span class="mr-auto"></span>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="./Time Machine/timeMachine.html" class="nav-link"
+              >Time Machine</a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a href="Map.html" class="nav-link">Map</a>
+          </li>
+
+          <li class="nav-item">
+            <a href="alert.html" class="nav-link">
+              Alerts
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="modal">
+              Github
+            </a>
+          </li>
+        </ul>
+        <!--  -->
+      </div>
+    </nav>
+
+    <header class="masthead text-white text-center">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h1 class="mb-5 mx-auto">Welcome to weather buddy!</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <br />
+    <br />
+    <section class="main">
+      <div class="mb-wrap mb-style-2">
+        <blockquote cite="http://www.gutenberg.org/ebboks/11">
+          <p>
+            When all is said and done, the weather and love are the two elements
+            about which one can never be sure.
+          </p>
+        </blockquote>
+      </div>
+      <!--#mb-wrap-->
+
+      <div class="mb-attribution">
+        <p class="mb-author">
+          Alice Hoffman
+        </p>
+      </div>
+      <!-- #mb-attribution-->
+    </section>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="center"><h1 class="h1">Services we offer</h1></div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <section class="showcase">
+      <div class="container-fluid p-0">
+        <div class="row no-gutters">
+          <div
+            class="col-lg-6 order-lg-2 text-white showcase-img animate-up"
+            style="background-image: url('images/StartPageImg1.jpg');"
+          ></div>
+
+          <div
+            class="col-lg-6 order-lg-1 my-auto showcase-text"
+            style="padding-left: 16px;"
+          >
+            <h2 class="h2 animate-up">Time Machine</h2>
+            <p class="lead mb-0 animate-up">
+              Get the weather information for the past, present or the future
+              for any location! wizardly? no, just science.
+            </p>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div
+            class="col-lg-6 text-white showcase-img animate-up"
+            style="background-image: url('images/StartPageImg2.png');"
+          ></div>
+          <div
+            class="col-lg-6 my-auto showcase-text"
+            style="padding-left: 16px;"
+          >
+            <h2 class="animate-up mx-4">Weather Map</h2>
+            <p class="lead mb-0 animate-up mx-4">
+              Explore the weather maps powered by windy to get real time weather
+              information.
+            </p>
+          </div>
+          <br />
+        </div>
+        <div class="row no-gutters">
+          <div
+            class="col-lg-6 order-lg-2 text-white showcase-img animate-up"
+            style="background-image: url('images/StartPageImg3.png');"
+          ></div>
+
+          <div
+            class="col-lg-6 order-lg-1 my-auto showcase-text"
+            style="padding-left: 16px;"
+          >
+            <h2 class="h2 animate-up">Weather Alerts</h2>
+            <p class="lead mb-0 animate-up">
+              A weather alert system that uses the powerful weatherbit API to
+              get you the latest alerts.
+            </p>
+          </div>
+        </div>
+      </div>
+      <br />
+    </section>
+
+
+  </body>
+</html>

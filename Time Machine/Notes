@@ -1,0 +1,57 @@
+https://www.flaticon.com/
+
+
+SI units are as follows:
+
+summary: Any summaries containing temperature or snow accumulation units will have their values in degrees Celsius or in centimeters (respectively).
+nearestStormDistance: Kilometers.
+precipIntensity: Millimeters per hour.
+precipIntensityMax: Millimeters per hour.
+precipAccumulation: Centimeters.
+temperature: Degrees Celsius.
+temperatureMin: Degrees Celsius.
+temperatureMax: Degrees Celsius.
+apparentTemperature: Degrees Celsius.
+dewPoint: Degrees Celsius.
+windSpeed: Meters per second.
+windGust: Meters per second.
+pressure: Hectopascals.
+visibility: Kilometers.
+
+
+icon optional
+A machine-readable text summary of this data point, suitable for selecting an icon for display.
+
+If defined, this property will have one of the following values: 
+
+clear-day, (done)
+
+clear-night, (done)
+
+rain, (done)
+
+snow,  (done)
+
+sleet, (done)
+
+wind,  (done)
+
+fog, (done) 
+
+cloudy,  (done)
+
+partly-cloudy-day, (done)
+
+partly-cloudy-night. (done)
+
+hail (done)
+
+thunderstorm (done)
+
+tornado (done)
+
+(Developers should ensure that a sensible default is defined, 
+as additional values, such as hail, 
+thunderstorm, or tornado, may be defined in the future.)
+
+//https://www.flaticon.com/3?category_id=12&order_by=4&color=2&grid=small
