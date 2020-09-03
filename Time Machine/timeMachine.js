@@ -9,25 +9,6 @@ weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
-// var rainQuotes = [
-//   "Into each life some rain must fall.",
-//   "Clouds come floating into my life, no longer to carry rain or usher storm, but to add color to my sunset sky.",
-//   "True, the sun and the wind inspire. But rain has an edge. Who, after all, dreams of dancing in dust? Or kissing in the bright sun?",
-//   "A single gentle rain makes the grass many shades greener.",
-// ];
-// var rainAuthor = [
-//   "Henry Wadsworth Longfellow",
-//   "Rabindranath Tagore",
-//   "Cynthia Barnett",
-//   "Henry David Thoreau",
-// ];
-
-// var clearDay = ["Ô, Sunlight! The most precious gold to be found on Earth."];
-// var clearDayAuthor = ["Roman Payne"];
-
-//
-//
-
 function isInvalid() {
   console.log(`\nCity Input = ${$("#city-input").val()}\n`);
   if ($("#city-input").val() == "") {
@@ -69,6 +50,16 @@ function isInvalid() {
 }
 
 document.getElementById("btn1").addEventListener("click", function () {
+  $("#GraphContainer").hide(500);
+
+  $("div#tempChart").html("<p></p>");
+  $("div#dewPointChart").html("<p></p>");
+  $("div#humidityChart").html("<p></p>");
+  $("div#precipProbabilityChart").html("<p></p>");
+  $("div#pressureChart").html("<p></p>");
+  $("div#windSpeedGraph").html("<p></p>");
+  $("div#windGustGraph").html("<p></p>");
+
   if (isInvalid()) return;
 
   getweather($("#city-input").val());
@@ -90,7 +81,6 @@ function getweather(city) {
 
   $("#loader").toggle(500);
   $("#btn1").prop("disabled", true);
-  $("div#chartContainer").html("<p></p>");
   emptyCarousel();
 
   fetch(
@@ -113,96 +103,630 @@ function getweather(city) {
       console.log("\nDisplay carousel\n");
     })
     .then(() => {
+      $("#GraphContainer").show(500);
       alert("Please Scroll down to view the results!");
     })
     .catch((err) => alert("Invalid City or connecting to the API failed"))
     .finally(() => {
-      $("#loader").toggle(500);
+      $("#loader").toggle(1000);
       $("#btn1").prop("disabled", false);
     });
 }
 
-async function generateGraph() {
-  $("div#chartContainer").html("<br/><br/><br/>");
-  const myDataPoints = [];
+function generateTempGraph() {
+  $("div#tempChart").html("<p></p>");
+  let myHighData = [];
+  let myLowData = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    myLowData.push(pastArray[i].temperatureLow);
+    myHighData.push(pastArray[i].temperatureHigh);
+    myCategories.push(pastArray[i].formattedDate);
+  }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    myLowData.push(futureArray[i].temperatureLow);
+    myHighData.push(futureArray[i].temperatureHigh);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  var options = {
+    series: [
+      {
+        name: "High ",
+        data: myHighData,
+      },
+      {
+        name: "Low ",
+        data: myLowData,
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+      dropShadow: {
+        enabled: true,
+        color: "#000",
+        top: 18,
+        left: 7,
+        blur: 10,
+        opacity: 0.2,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ["#77B6EA", "#545454"],
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    title: {
+      text: "High & Low Temperature",
+      align: "left",
+    },
+    grid: {
+      borderColor: "#e7e7e7",
+      row: {
+        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        opacity: 0.5,
+      },
+    },
+    markers: {
+      size: 1,
+    },
+    xaxis: {
+      categories: myCategories,
+      title: {
+        text: "Date",
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Temperature",
+      },
+      min: -20,
+      max: 60,
+    },
+
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      floating: true,
+      offsetY: -25,
+      offsetX: -5,
+    },
+  };
+
+  var chart = new ApexCharts(document.querySelector("#tempChart"), options);
+  chart.render();
+}
+
+function generateDewPointGraph() {
+  $("div#dewPointChart").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
 
   for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
     // { label: "Monday", y: [15, 26], name: "rainy" },
-    myDataPoints.push({
-      label: pastArray[i].formattedDate,
-      y: [pastArray[i].temperatureLow, pastArray[i].temperatureHigh],
-      name:
-        pastArray[i].icon == undefined || pastArray[i].icon == "undefined"
-          ? "No data availabe"
-          : pastArray[i].icon,
-    });
+    myDataPoints.push(pastArray[i].dewPoint);
+    myCategories.push(pastArray[i].formattedDate);
   }
 
   for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
     // { label: "Monday", y: [15, 26], name: "rainy" },
-    myDataPoints.push({
-      label: futureArray[i].formattedDate,
-      y: [futureArray[i].temperatureLow, futureArray[i].temperatureHigh],
-      name:
-        futureArray[i].icon == undefined || futureArray[i].icon == "undefined"
-          ? "No data availabe"
-          : futureArray[i].icon,
-    });
+    myDataPoints.push(futureArray[i].dewPoint);
+    myCategories.push(futureArray[i].formattedDate);
   }
 
-  //Chart library - CanvasJS
-  var chart = new CanvasJS.Chart("chartContainer", {
-    title: {
-      text: "Time Machine - Weather Forecast",
-    },
-    axisY: {
-      suffix: " °C",
-      maximum: 60,
-      minimum: -20,
-      gridThickness: 0,
-    },
-
-    toolTip: {
-      shared: true,
-      content:
-        "{name} </br> <strong>Temperature: </strong> </br> Min: {y[0]} °C, Max: {y[1]} °C",
-    },
-
-    data: [
+  let options = {
+    series: [
       {
-        type: "rangeSplineArea",
-        fillOpacity: 0.1,
-        color: "#91AAB1",
-        indexLabelFormatter: formatter,
-        dataPoints: myDataPoints,
+        name: "Reading",
+        data: myDataPoints,
         // [
-        //   { label: "Monday", y: [15, 26], name: "rainy" },
-        //   { label: "Tuesday", y: [15, 27], name: "rainy" },
-        //   { label: "Wednesday", y: [13, 27], name: "sunny" },
-        //   { label: "Thursday", y: [14, 27], name: "sunny" },
-        //   { label: "Friday", y: [15, 26], name: "cloudy" },
-        //   { label: "Saturday", y: [17, 26], name: "sunny" },
-        //   { label: "Sunday", y: [16, 27], name: "rainy" },
-        //   { label: "Thursday", y: [14, 27], name: "sunny" },
-        //   { label: "Friday", y: [15, 26], name: "cloudy" },
-        //   { label: "Saturday", y: [17, 26], name: "sunny" },
-        //   { label: "Sunday", y: [16, 27], name: "rainy" },
+        //   0.4,
+        //   0.3,
         // ],
       },
     ],
-  });
-
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "DewPoint",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 35,
+      title: {
+        text: "Degrees Celsius",
+      },
+    },
+  };
+  var chart = new ApexCharts(document.querySelector("#dewPointChart"), options);
   chart.render();
+}
 
-  function formatter(e) {
-    if (e.index === 0 && e.dataPoint.x === 0) {
-      return " Min " + e.dataPoint.y[e.index] + "°";
-    } else if (e.index == 1 && e.dataPoint.x === 0) {
-      return " Max " + e.dataPoint.y[e.index] + "°";
-    } else {
-      return e.dataPoint.y[e.index] + "°";
-    }
+function generateHumidityGraph() {
+  $("div#humidityChart").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(pastArray[i].humidity);
+    myCategories.push(pastArray[i].formattedDate);
   }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(futureArray[i].humidity);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  let options = {
+    series: [
+      {
+        name: "Reading",
+        data: myDataPoints,
+        // [
+        //   0.4,
+        //   0.3,
+        // ],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "Humidity",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 1,
+      title: {
+        text: "Grams per cubic meter",
+      },
+    },
+  };
+  var chart = new ApexCharts(document.querySelector("#humidityChart"), options);
+  chart.render();
+}
+
+function generatePrecipProbabilityGraph() {
+  $("div#precipProbabilityChart").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(pastArray[i].precipProbability);
+    myCategories.push(pastArray[i].formattedDate);
+  }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(futureArray[i].precipProbability);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  let options = {
+    series: [
+      {
+        name: "Reading",
+        data: myDataPoints,
+        // [
+        //   0.4,
+        //   0.3,
+        // ],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "PrecipProbability",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 1,
+    },
+  };
+
+  var chart = new ApexCharts(
+    document.querySelector("#precipProbabilityChart"),
+    options
+  );
+  chart.render();
+}
+
+function generatePressureGraph() {
+  $("div#pressureChart").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(pastArray[i].pressure);
+    myCategories.push(pastArray[i].formattedDate);
+  }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(futureArray[i].pressure);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  let options = {
+    series: [
+      {
+        name: "Reading",
+        data: myDataPoints,
+        // [
+        //   0.4,
+        //   0.3,
+        // ],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "Pressure",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 500,
+      max: 1500,
+      title: {
+        text: "Hectopascals",
+      },
+    },
+  };
+  var chart = new ApexCharts(document.querySelector("#pressureChart"), options);
+  chart.render();
+}
+
+function generateWindSpeedGraph() {
+  $("div#windSpeedGraph").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(pastArray[i].windSpeed);
+    myCategories.push(pastArray[i].formattedDate);
+  }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(futureArray[i].windSpeed);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  let options = {
+    series: [
+      {
+        name: "Reading",
+        data: myDataPoints,
+        // [
+        //   0.4,
+        //   0.3,
+        // ],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "Wind Speed",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 15,
+      title: {
+        text: "Meters per second",
+      },
+    },
+  };
+  var chart = new ApexCharts(
+    document.querySelector("#windSpeedGraph"),
+    options
+  );
+  chart.render();
+}
+
+function generateWindGustGraph() {
+  $("div#windGustGraph").html("<p></p>");
+  let myDataPoints = [];
+  let myCategories = [];
+
+  for (let i = Math.min(5, pastArray.length - 1); i >= 0; i--) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(pastArray[i].windGust);
+    myCategories.push(pastArray[i].formattedDate);
+  }
+
+  for (let i = 0; i <= Math.min(4, futureArray.length - 1); i++) {
+    // { label: "Monday", y: [15, 26], name: "rainy" },
+    myDataPoints.push(futureArray[i].windGust);
+    myCategories.push(futureArray[i].formattedDate);
+  }
+
+  let options = {
+    series: [
+      {
+        name: "Reading",
+        data: myDataPoints,
+        // [
+        //   0.4,
+        //   0.3,
+        // ],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth",
+    },
+    xaxis: {
+      type: "string",
+      categories: myCategories,
+      // [
+      //   "1/11/2000",
+      //   "2/11/2000",
+      // ],
+    },
+    title: {
+      text: "Wind Gust",
+      align: "left",
+      style: {
+        fontSize: "16px",
+        color: "#666",
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
+        shadeIntensity: 1,
+        type: "horizontal",
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100],
+      },
+    },
+    markers: {
+      size: 4,
+      colors: ["#FFA41B"],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 7,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 15,
+      title: {
+        text: "Meters per second",
+      },
+    },
+  };
+  var chart = new ApexCharts(document.querySelector("#windGustGraph"), options);
+  chart.render();
+}
+
+function generateGraph() {
+  generateTempGraph();
+  generateDewPointGraph();
+  generateHumidityGraph();
+  generatePrecipProbabilityGraph();
+  generatePressureGraph();
+  generateWindSpeedGraph();
+  generateWindGustGraph();
 }
 
 function getDataModelFromJson(dataObj) {
@@ -218,6 +742,9 @@ function getDataModelFromJson(dataObj) {
   dataModel.pressure = dataObj.pressure;
   dataModel.humidity = dataObj.humidity;
   dataModel.windSpeed = dataObj.windSpeed;
+  dataModel.windGust = dataObj.windGust;
+  dataModel.dewPoint = dataObj.dewPoint;
+  dataModel.precipProbability = dataObj.precipProbability;
 
   return dataModel;
 }
@@ -242,13 +769,16 @@ async function getPast(lat, long) {
       d - i * 86400
     }?units=si`;
 
+    // console.log("Get past, day " + i + ", url : \n" + url + "\n");
+
     await fetch(url, {
       method: "GET",
     })
       .then((req) => req.json())
       .then((data) => {
-        console.log(`Past For day : ${i}\n`);
-
+        // console.log(`Past For day : ${i}\n`);
+        // console.log(data.daily.data[0]);
+        // console.log("\n");
         let dataObj = data.daily.data[0];
         let dataModel = {};
         let curDate = new Date();
@@ -309,7 +839,9 @@ async function getFuture(lat, long) {
     })
       .then((req) => req.json())
       .then((data) => {
-        console.log(`Future For day : ${j}\n`);
+        // console.log(`Future For day : ${j}\n`);
+        // console.log(data.daily.data[0]);
+        // console.log("\n");
         let dataObj = data.daily.data[0];
         let hourlyData = data.hourly;
         let dataModel = {};
@@ -348,11 +880,10 @@ async function getFuture(lat, long) {
 }
 
 function prepareCards() {
-  console.log("\nin prepareCards\n");
-  console.log(pastArray);
-
-  console.log(futureArray);
-  console.log("\n");
+  // console.log("\nin prepareCards\n");
+  // console.log(pastArray);
+  // console.log(futureArray);
+  // console.log("\n");
   preparePastCards();
   // await prepareFutureCards();
 }
@@ -413,20 +944,20 @@ function cardTemplate(arrayType, ind, caseId) {
 }
 
 function preparePastCards() {
-  console.log("\nin preparePastCards\n");
+  // console.log("\nin preparePastCards\n");
 
-  console.log("Adding prev item\n");
+  // console.log("Adding prev item\n");
   //caseId 1
   cardTemplate(0, 1, 1);
 
-  console.log("Adding show item\n");
+  // console.log("Adding show item\n");
   //caseId 2
   cardTemplate(0, 0, 2);
 
   prepareFutureCards();
 
   for (let i = pastArray.length - 1; i > 2; i--) {
-    console.log("Adding past item\n");
+    // console.log("Adding past item\n");
     cardTemplate(0, i, 3);
   }
 
@@ -437,13 +968,13 @@ function preparePastCards() {
 } //prepare past cards
 
 function prepareFutureCards() {
-  console.log("\nin prepareFutureCards\n");
+  // console.log("\nin prepareFutureCards\n");
 
   for (let i = 0; i < futureArray.length - 1; i++) {
-    console.log("Adding future item\n");
+    // console.log("Adding future item\n");
     cardTemplate(1, i, i == 0 ? 5 : 3);
   }
 
-  console.log("Adding future-last item\n");
+  // console.log("Adding future-last item\n");
   cardTemplate(1, futureArray.length - 1, futureArray.length - 1 == 0 ? 6 : 4);
 }

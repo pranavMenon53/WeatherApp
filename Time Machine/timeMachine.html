@@ -214,6 +214,7 @@
     <script>
       $(document).ready(function () {
         $("#loader").hide(500);
+        $("#GraphContainer").hide();
 
         //Logic for cards
 
@@ -298,63 +299,19 @@
       });
     </script>
 
-    <!-- <script>
-      window.onload = function () {
-        var chart = new CanvasJS.Chart("chartContainer", {
-          title: {
-            text: "Time Machine - Weather Forecast",
-          },
-          axisY: {
-            suffix: " °C",
-            maximum: 40,
-            minimum: -40,
-            gridThickness: 0,
-          },
-
-          toolTip: {
-            shared: true,
-            content:
-              "{name} </br> <strong>Temperature: </strong> </br> Min: {y[0]} °C, Max: {y[1]} °C",
-          },
-
-          data: [
-            {
-              type: "rangeSplineArea",
-              fillOpacity: 0.1,
-              color: "#91AAB1",
-              indexLabelFormatter: formatter,
-              dataPoints: [
-                { label: "Monday", y: [15, 26], name: "rainy" },
-                { label: "Tuesday", y: [15, 27], name: "rainy" },
-                { label: "Wednesday", y: [13, 27], name: "sunny" },
-                { label: "Thursday", y: [14, 27], name: "sunny" },
-                { label: "Friday", y: [15, 26], name: "cloudy" },
-                { label: "Saturday", y: [17, 26], name: "sunny" },
-                { label: "Sunday", y: [16, 27], name: "rainy" },
-                { label: "Thursday", y: [14, 27], name: "sunny" },
-                { label: "Friday", y: [15, 26], name: "cloudy" },
-                { label: "Saturday", y: [17, 26], name: "sunny" },
-                { label: "Sunday", y: [16, 27], name: "rainy" },
-              ],
-            },
-          ],
-        });
-        chart.render();
-
-        function formatter(e) {
-          if (e.index === 0 && e.dataPoint.x === 0) {
-            return " Min " + e.dataPoint.y[e.index] + "°";
-          } else if (e.index == 1 && e.dataPoint.x === 0) {
-            return " Max " + e.dataPoint.y[e.index] + "°";
-          } else {
-            return e.dataPoint.y[e.index] + "°";
-          }
-        }
-      };
-    </script> -->
-
     <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
-    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        /* overflow: hidden; */
+      }
+    </style>
   </head>
 
   <body>
@@ -520,11 +477,68 @@
     <!--  -->
     <!-- Chart Start here -->
     <!--  -->
-    <div
-      class="mx-auto"
-      id="chartContainer"
-      style="height: 400px; width: 80%; position: relative"
-    ></div>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <div id="GraphContainer" style="width: 100%;">
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="tempChart"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="dewPointChart"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="humidityChart"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="precipProbabilityChart"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="pressureChart"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="windSpeedGraph"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <div
+        class="mx-auto"
+        id="windGustGraph"
+        style="height: 400px; width: 80%; position: relative;"
+      ></div>
+    </div>
     <!--  -->
     <!--  -->
     <!-- Chart End here -->
