@@ -10,7 +10,7 @@ weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
 function isInvalid() {
-  console.log(`\nCity Input = ${$("#city-input").val()}\n`);
+  // console.log(`\nCity Input = ${$("#city-input").val()}\n`);
   if ($("#city-input").val() == "") {
     alert("City is required!");
     return true;
@@ -52,13 +52,7 @@ function isInvalid() {
 document.getElementById("btn1").addEventListener("click", function () {
   $("#GraphContainer").hide(500);
 
-  $("div#tempChart").html("<p></p>");
-  $("div#dewPointChart").html("<p></p>");
-  $("div#humidityChart").html("<p></p>");
-  $("div#precipProbabilityChart").html("<p></p>");
-  $("div#pressureChart").html("<p></p>");
-  $("div#windSpeedGraph").html("<p></p>");
-  $("div#windGustGraph").html("<p></p>");
+  $("div#chart").html("");
 
   if (isInvalid()) return;
 
@@ -114,7 +108,8 @@ function getweather(city) {
 }
 
 function generateTempGraph() {
-  $("div#tempChart").html("<p></p>");
+  // console.log("generateTempGraph");
+  $("div#chart").html("");
   let myHighData = [];
   let myLowData = [];
   let myCategories = [];
@@ -201,12 +196,13 @@ function generateTempGraph() {
     },
   };
 
-  var chart = new ApexCharts(document.querySelector("#tempChart"), options);
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generateDewPointGraph() {
-  $("div#dewPointChart").html("<p></p>");
+  // console.log("generateDewPointGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -286,12 +282,13 @@ function generateDewPointGraph() {
       },
     },
   };
-  var chart = new ApexCharts(document.querySelector("#dewPointChart"), options);
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generateHumidityGraph() {
-  $("div#humidityChart").html("<p></p>");
+  // console.log("generateHumidityGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -371,12 +368,13 @@ function generateHumidityGraph() {
       },
     },
   };
-  var chart = new ApexCharts(document.querySelector("#humidityChart"), options);
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generatePrecipProbabilityGraph() {
-  $("div#precipProbabilityChart").html("<p></p>");
+  // console.log("generatePrecipProbabilityGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -454,15 +452,13 @@ function generatePrecipProbabilityGraph() {
     },
   };
 
-  var chart = new ApexCharts(
-    document.querySelector("#precipProbabilityChart"),
-    options
-  );
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generatePressureGraph() {
-  $("div#pressureChart").html("<p></p>");
+  // console.log("generatePressureGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -542,12 +538,13 @@ function generatePressureGraph() {
       },
     },
   };
-  var chart = new ApexCharts(document.querySelector("#pressureChart"), options);
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generateWindSpeedGraph() {
-  $("div#windSpeedGraph").html("<p></p>");
+  // console.log("generateWindSpeedGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -627,15 +624,13 @@ function generateWindSpeedGraph() {
       },
     },
   };
-  var chart = new ApexCharts(
-    document.querySelector("#windSpeedGraph"),
-    options
-  );
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generateWindGustGraph() {
-  $("div#windGustGraph").html("<p></p>");
+  // console.log("generateWindGustGraph");
+  $("div#chart").html("");
   let myDataPoints = [];
   let myCategories = [];
 
@@ -715,18 +710,18 @@ function generateWindGustGraph() {
       },
     },
   };
-  var chart = new ApexCharts(document.querySelector("#windGustGraph"), options);
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 }
 
 function generateGraph() {
   generateTempGraph();
-  generateDewPointGraph();
-  generateHumidityGraph();
-  generatePrecipProbabilityGraph();
-  generatePressureGraph();
-  generateWindSpeedGraph();
-  generateWindGustGraph();
+  // generateDewPointGraph();
+  // generateHumidityGraph();
+  // generatePrecipProbabilityGraph();
+  // generatePressureGraph();
+  // generateWindSpeedGraph();
+  // generateWindGustGraph();
 }
 
 function getDataModelFromJson(dataObj) {
@@ -922,17 +917,16 @@ function cardTemplate(arrayType, ind, caseId) {
       data.icon === undefined || data.icon === "undefined"
         ? "No data avaliable"
         : data.icon
-    }, ${data.curTemp}°C</h5>
+    }, ${data.curTemp}°C
+    </h5>
     
     <span>
-      <span class="dot">•</span>
         Wind ${data.windSpeed}m/s 
         <span class="dot">•</span>
         Pressure ${data.pressure}hPa
-      <span class="dot">•</span>
     </span>
     
-    <p class="content my-3 mx-2">
+    <p class="content my-3 mx-auto">
         ${data.summary}
     </p>
   </div>
